@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.my.blog.website.dao.TickerVoMapper">
+    <resultMap id="BaseResultMap" type="com.my.blog.website.modal.Vo.TickerVo">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
+        <result column="symbol" jdbcType="VARCHAR" property="symbol"/>
+        <result column="website_slug" jdbcType="VARCHAR" property="website_slug"/>
+        <result column="symbol" jdbcType="VARCHAR" property="symbol"/>
+        <result column="circulating_supply" jdbcType="VARCHAR" property="circulating_supply"/>
+        <result column="last_updated" jdbcType="VARCHAR" property="last_updated"/>
+        <result column="max_supply" jdbcType="VARCHAR" property="max_supply"/>
+        <result column="total_supply" jdbcType="VARCHAR" property="total_supply"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, name, symbol, website_slug, symbol, circulating_supply,last_updated,max_supply,total_supply
+    </sql>
+    <select id="selectBySymbol" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_ticker
+        where symbol = #{symbol,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectByName" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_ticker
+        where name = #{name,jdbcType=VARCHAR}
+    </select>
+
+</mapper>

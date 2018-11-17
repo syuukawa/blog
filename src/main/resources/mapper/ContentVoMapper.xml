@@ -3,6 +3,13 @@
 <mapper namespace="com.my.blog.website.dao.ContentVoMapper">
   <resultMap id="BaseResultMap" type="com.my.blog.website.modal.Vo.ContentVo">
     <id column="cid" jdbcType="INTEGER" property="cid" />
+    <!--add by jiutian-->
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="symbol" jdbcType="VARCHAR" property="symbol" />
+    <result column="crowdPrice" jdbcType="VARCHAR" property="crowdPrice" />
+    <result column="crowdEndTime" jdbcType="VARCHAR" property="crowdEndTime" />
+
+
     <result column="title" jdbcType="VARCHAR" property="title" />
     <result column="slug" jdbcType="VARCHAR" property="slug" />
     <result column="created" jdbcType="INTEGER" property="created" />
@@ -80,7 +87,7 @@
     </where>
   </sql>
   <sql id="Base_Column_List">
-    cid, title, slug, created, modified, author_id, type, status, tags, categories, hits, 
+    cid, name, symbol, crowdPrice, crowdEndTime, title, slug, created, modified, author_id, type, status, tags, categories, hits,
     comments_num, allow_comment, allow_ping, allow_feed
   </sql>
   <sql id="Blob_Column_List">
@@ -143,13 +150,16 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.my.blog.website.modal.Vo.ContentVo" useGeneratedKeys="true" keyProperty="cid">
-    insert into t_contents (cid, title, slug, 
+    insert into t_contents (cid, name, symbol, crowdPrice, crowdEndTime
+      title, slug,
       created, modified, author_id, 
       type, status, tags, 
       categories, hits, comments_num, 
       allow_comment, allow_ping, allow_feed, 
       content)
-    values (#{cid,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR}, 
+    values (#{cid,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{symbol,jdbcType=VARCHAR},
+      #{crowdPrice,jdbcType=VARCHAR}, #{crowdPrice,jdbcType=VARCHAR},
+      #{title,jdbcType=VARCHAR}, #{slug,jdbcType=VARCHAR},
       #{created,jdbcType=INTEGER}, #{modified,jdbcType=INTEGER}, #{authorId,jdbcType=INTEGER}, 
       #{type,jdbcType=VARCHAR}, #{status,jdbcType=VARCHAR}, #{tags,jdbcType=VARCHAR}, 
       #{categories,jdbcType=VARCHAR}, #{hits,jdbcType=INTEGER}, #{commentsNum,jdbcType=INTEGER}, 
@@ -164,6 +174,18 @@
       </if>
       <if test="title != null">
         title,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="symbol != null">
+        symbol,
+      </if>
+      <if test="crowdPrice != null">
+        crowdPrice,
+      </if>
+      <if test="crowdEndTime != null">
+        crowdEndTime,
       </if>
       <if test="slug != null">
         slug,
@@ -211,6 +233,18 @@
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="cid != null">
         #{cid,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="symbol != null">
+        #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="crowdPrice != null">
+        #{crowdPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="crowdEndTime != null">
+        #{crowdEndTime,jdbcType=VARCHAR},
       </if>
       <if test="title != null">
         #{title,jdbcType=VARCHAR},
@@ -325,6 +359,10 @@
     update t_contents
     set cid = #{record.cid,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      symbol = #{record.symbol,jdbcType=VARCHAR},
+      crowdPrice = #{record.crowdPrice,jdbcType=VARCHAR},
+      crowdEndTime = #{record.crowdEndTime,jdbcType=VARCHAR},
       slug = #{record.slug,jdbcType=VARCHAR},
       created = #{record.created,jdbcType=INTEGER},
       modified = #{record.modified,jdbcType=INTEGER},
@@ -347,6 +385,10 @@
     update t_contents
     set cid = #{record.cid,jdbcType=INTEGER},
       title = #{record.title,jdbcType=VARCHAR},
+      name = #{record.name,jdbcType=VARCHAR},
+      symbol = #{record.symbol,jdbcType=VARCHAR},
+      crowdPrice = #{record.crowdPrice,jdbcType=VARCHAR},
+      crowdEndTime = #{record.crowdEndTime,jdbcType=VARCHAR},
       slug = #{record.slug,jdbcType=VARCHAR},
       created = #{record.created,jdbcType=INTEGER},
       modified = #{record.modified,jdbcType=INTEGER},
@@ -369,6 +411,18 @@
     <set>
       <if test="title != null">
         title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="symbol != null">
+        symbol = #{symbol,jdbcType=VARCHAR},
+      </if>
+      <if test="crowdPrice != null">
+        crowdPrice = #{crowdPrice,jdbcType=VARCHAR},
+      </if>
+      <if test="crowdEndTime != null">
+        crowdEndTime = #{crowdEndTime,jdbcType=VARCHAR},
       </if>
       <if test="slug != null">
         slug = #{slug,jdbcType=VARCHAR},
@@ -418,6 +472,10 @@
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.my.blog.website.modal.Vo.ContentVo">
     update t_contents
     set title = #{title,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      symbol = #{symbol,jdbcType=VARCHAR},
+      crowdPrice = #{crowdPrice,jdbcType=VARCHAR},
+      crowdEndTime = #{crowdEndTime,jdbcType=VARCHAR},
       slug = #{slug,jdbcType=VARCHAR},
       created = #{created,jdbcType=INTEGER},
       modified = #{modified,jdbcType=INTEGER},
@@ -437,6 +495,10 @@
   <update id="updateByPrimaryKey" parameterType="com.my.blog.website.modal.Vo.ContentVo">
     update t_contents
     set title = #{title,jdbcType=VARCHAR},
+      name = #{name,jdbcType=VARCHAR},
+      symbol = #{symbol,jdbcType=VARCHAR},
+      crowdPrice = #{crowdPrice,jdbcType=VARCHAR},
+      crowdEndTime = #{crowdEndTime,jdbcType=VARCHAR},
       slug = #{slug,jdbcType=VARCHAR},
       created = #{created,jdbcType=INTEGER},
       modified = #{modified,jdbcType=INTEGER},
@@ -458,16 +520,25 @@
     <id column="date" property="date"/>
     <result column="count" property="count"/>
   </resultMap>
-
   <select id="findReturnArchiveBo" resultMap="archiveBoMap">
     select FROM_UNIXTIME(created, '%Y年%m月') as date, count(*) as count from t_contents where type = 'post' and status = 'publish' group by date order by date desc
   </select>
-
 
   <select id="findByCatalog" resultMap="BaseResultMap" parameterType="Integer">
     select a.*
     from t_contents a left join t_relationships b on a.cid = b.cid
     where b.mid = #{value} and a.status = 'publish' and a.type = 'post'
     order by a.created desc
+  </select>
+
+  <!--add by jiutian 11-15-->
+  <select id="findListByCategories" parameterType="java.lang.String" resultMap="ResultMapWithBLOBs">
+    select
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_contents
+    where status = 'publish' and type = 'post'
+    and categories LIKE CONCAT('%',#{categories},'%')
   </select>
 </mapper>

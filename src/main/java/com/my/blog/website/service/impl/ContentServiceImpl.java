@@ -1,16 +1,24 @@
 package com.my.blog.website.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.google.gson.JsonObject;
+import com.my.blog.website.bqientity.BqiTicker;
+import com.my.blog.website.coinmarketcap.entity.Ticker;
 import com.my.blog.website.constant.WebConst;
 import com.my.blog.website.dao.MetaVoMapper;
+import com.my.blog.website.dao.TickerVoMapper;
 import com.my.blog.website.dto.Types;
+import com.my.blog.website.entity.BqiTickerTable;
 import com.my.blog.website.exception.TipException;
+import com.my.blog.website.modal.Vo.AttachVo;
 import com.my.blog.website.modal.Vo.ContentVo;
 import com.my.blog.website.modal.Vo.ContentVoExample;
-import com.my.blog.website.service.IContentService;
-import com.my.blog.website.service.IMetaService;
-import com.my.blog.website.service.IRelationshipService;
+import com.my.blog.website.modal.Vo.TickerVo;
+import com.my.blog.website.repository.BqiTickerRepository;
+import com.my.blog.website.service.*;
 import com.my.blog.website.utils.DateKit;
 import com.my.blog.website.utils.TaleUtils;
 import com.my.blog.website.utils.Tools;
@@ -19,9 +27,12 @@ import com.my.blog.website.dao.ContentVoMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -42,6 +53,18 @@ public class ContentServiceImpl implements IContentService {
 
     @Resource
     private IMetaService metasService;
+
+    @Resource
+    private IAttachService attachService;
+
+    @Resource
+    private TickerVoMapper tickerDao;
+
+    @Resource
+    private ITickerService tickerService;
+
+    @Autowired
+    private BqiTickerRepository bqiTickerRepository;
 
     @Override
     public void publish(ContentVo contents) {
@@ -96,15 +119,87 @@ public class ContentServiceImpl implements IContentService {
     }
 
     @Override
-    public PageInfo<ContentVo> getContents(Integer p, Integer limit) {
+    public PageInfo<ContentVo> getContents(Integer p, Integer limit) throws IOException {
         LOGGER.debug("Enter getContents method");
         ContentVoExample example = new ContentVoExample();
         example.setOrderByClause("created desc");
         example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
         PageHelper.startPage(p, limit);
         List<ContentVo> data = contentDao.selectByExampleWithBLOBs(example);
+        for (ContentVo vo : data) {
+
+            //1:添加图片显示的处理  jiutian
+            String name = vo.getName() + ".jpg";
+            AttachVo attachVo = attachService.selectByFname(name);
+            if (attachVo != null) {
+                String picturePath = attachVo.getFkey();
+                vo.setBgImage(picturePath);
+            }
+
+//TODO  001 在后台管理里边输入coinmarketcap对应的id
+//
+//            //2：添加价格的显示处理 TODO 在后台管理里边输入coinmarketcap对应的id 然后在获取价格
+//            TickerVo tickerVo = tickerDao.selectByName(vo.getName());
+////            System.out.println("name : " + tickerVo.getName());
+//            if (tickerVo != null) {
+//                Ticker ticker = tickerService.GetTicker(tickerVo.getId().toString());
+//                if (ticker != null) {
+////                System.out.println("24小时价格变动 ： " + ticker.getQuotes().getUSD().getPercent_change_24h());
+//                    vo.setPrice(ticker.getQuotes().getUSD().getPrice().substring(0,7) + "USD");
+//                    vo.setPercent_change_24h(ticker.getQuotes().getUSD().getPercent_change_24h() + "%");
+//                }
+//            } else {
+//                vo.setPrice("");
+//                vo.setPercent_change_24h("");
+//            }
+//TODO 002 https://www.bqi.com/api/
+//            BqiTicker bqiTicker = tickerService.GetBqiTicker(vo.getName());
+            BqiTickerTable bqiTicker = bqiTickerRepository.findOneByName(vo.getName());
+            if (bqiTicker != null) {
+                vo.setPrice(bqiTicker.getPrice_usd() + "USD");
+                vo.setPercent_change_24h(bqiTicker.getPercent_change_24h() + "%");
+            } else {
+                vo.setPrice("");
+                vo.setPercent_change_24h("");
+            }
+        }
         PageInfo<ContentVo> pageInfo = new PageInfo<>(data);
         LOGGER.debug("Exit getContents method");
+        return pageInfo;
+    }
+
+
+    //TODO add by jiutian
+    @Override
+    public PageInfo<ContentVo> getContentsByCategory(Integer p, String category, Integer limit) {
+        LOGGER.debug("Enter getContentsByCategory method");
+        ContentVoExample example = new ContentVoExample();
+        example.setOrderByClause("created desc");
+        example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType())
+                .andCategoriesLike(category);
+        PageHelper.startPage(p, limit);
+        List<ContentVo> data = contentDao.selectByExampleWithBLOBs(example);
+        for (ContentVo vo : data) {
+            //1:添加图片显示的处理  jiutian
+            String name = vo.getName() + ".jpg";
+            AttachVo attachVo = attachService.selectByFname(name);
+            if (attachVo != null) {
+                String picturePath = attachVo.getFkey();
+                vo.setBgImage(picturePath);
+            }
+//TODO 002 https://www.bqi.com/api/
+//            BqiTicker bqiTicker = tickerService.GetBqiTicker(vo.getName());
+            BqiTickerTable bqiTicker = bqiTickerRepository.findOneByName(vo.getName());
+            if (bqiTicker != null) {
+                vo.setPrice(bqiTicker.getPrice_usd() + "USD");
+                vo.setPercent_change_24h(bqiTicker.getPercent_change_24h() + "%");
+            } else {
+                vo.setPrice("");
+                vo.setPercent_change_24h("");
+            }
+        }
+        PageInfo<ContentVo> pageInfo = new PageInfo<>(data);
+        LOGGER.debug("Exit getContentsByCategory method");
         return pageInfo;
     }
 

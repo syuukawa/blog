@@ -1,6 +1,7 @@
 package com.my.blog.website.dao;
 
 import com.my.blog.website.modal.Bo.ArchiveBo;
+import com.my.blog.website.modal.Bo.CatalogueBo;
 import com.my.blog.website.modal.Vo.ContentVo;
 import com.my.blog.website.modal.Vo.ContentVoExample;
 
@@ -39,6 +40,9 @@ public interface ContentVoMapper {
     int updateByPrimaryKey(ContentVo record);
 
     List<ArchiveBo> findReturnArchiveBo();
+
+    //按分类分组查询
+    List<ContentVo> findListByCategories(String category);
 
     List<ContentVo> findByCatalog(Integer mid);
 }

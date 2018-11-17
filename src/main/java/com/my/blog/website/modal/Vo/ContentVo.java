@@ -3,13 +3,30 @@ package com.my.blog.website.modal.Vo;
 import java.io.Serializable;
 
 /**
- * @author 
+ * @author
  */
 public class ContentVo implements Serializable {
     /**
      * post表主键
      */
     private Integer cid;
+
+    /**
+     * 虚拟币名称
+     */
+    private String name;
+
+    /**
+     * 虚拟币标示
+     */
+    private String symbol;
+
+    //  background image
+    private String bgImage;
+
+    private String crowdPrice;
+
+    private String crowdEndTime;
 
     /**
      * 内容标题
@@ -85,6 +102,17 @@ public class ContentVo implements Serializable {
      * 内容文字
      */
     private String content;
+
+    /**
+     * 价格
+     */
+    private String price;
+
+    /**
+     * 24小时变动
+     */
+    private String percent_change_24h;
+
 
     private static final long serialVersionUID = 1L;
 
@@ -214,5 +242,61 @@ public class ContentVo implements Serializable {
 
     public void setContent(String content) {
         this.content = content;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSymbol() {
+        return symbol;
+    }
+
+    public void setSymbol(String symbol) {
+        this.symbol = symbol;
+    }
+
+    public String getBgImage() {
+        return bgImage;
+    }
+
+    public void setBgImage(String bgImage) {
+        this.bgImage = bgImage;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getPercent_change_24h() {
+        return percent_change_24h;
+    }
+
+    public void setPercent_change_24h(String percent_change_24h) {
+        this.percent_change_24h = percent_change_24h;
+    }
+
+    public String getCrowdPrice() {
+        return crowdPrice;
+    }
+
+    public void setCrowdPrice(String crowdPrice) {
+        this.crowdPrice = crowdPrice;
+    }
+
+    public String getCrowdEndTime() {
+        return crowdEndTime;
+    }
+
+    public void setCrowdEndTime(String crowdEndTime) {
+        this.crowdEndTime = crowdEndTime;
     }
 }

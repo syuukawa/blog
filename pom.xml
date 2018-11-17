@@ -3,15 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.my.blog.website</groupId>
-    <artifactId>my-blog</artifactId>
-    <!-- now -->
-    <version>3.0.1-SNAPSHOT</version>
+    <groupId>stoken.global</groupId>
+    <artifactId>stoken</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
 
-    <packaging>war</packaging>
-
-    <name>my-blog</name>
-    <description>My Java Blog project for Spring Boot</description>
+    <name>stoken</name>
+    <description>stoken project for Spring Boot</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -161,6 +159,66 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
+
+        <!--add by zhouhe 20181102-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-data-jpa</artifactId>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.17</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>4.5.2</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.sourceforge.htmlcleaner/htmlcleaner -->
+        <dependency>
+            <groupId>net.sourceforge.htmlcleaner</groupId>
+            <artifactId>htmlcleaner</artifactId>
+            <version>2.22</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
+        <dependency>
+            <groupId>org.jsoup</groupId>
+            <artifactId>jsoup</artifactId>
+            <version>1.11.3</version>
+        </dependency>
+        <!--JPA Config-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.projectlombok</groupId>-->
+            <!--<artifactId>lombok</artifactId>-->
+            <!--<scope>compile</scope>-->
+        <!--</dependency>-->
+        <!-- caching -->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.boot</groupId>-->
+            <!--<artifactId>spring-boot-starter-cache</artifactId>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>net.sf.ehcache</groupId>-->
+            <!--<artifactId>ehcache</artifactId>-->
+        <!--</dependency>-->
+
     </dependencies>
 
     <!-- 普通的maven打包方式 -->
@@ -170,6 +228,43 @@
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-maven-plugin</artifactId>
                 </plugin>
+
+                <!--Docker-->
+                <!--<plugin>-->
+                    <!--<groupId>com.spotify</groupId>-->
+                    <!--<artifactId>docker-maven-plugin</artifactId>-->
+                    <!--<version>0.4.11</version>-->
+                    <!--<configuration>-->
+                        <!--<imageName>syuukawa/${project.artifactId}</imageName>-->
+                        <!--<dockerDirectory>src/main/docker</dockerDirectory>-->
+
+                        <!--<resources>-->
+                            <!--<resource>-->
+                                <!--<targetPath>/</targetPath>-->
+                                <!--<directory>target</directory>-->
+                                <!--<include>${project.build.finalName}.jar</include>-->
+                            <!--</resource>-->
+                        <!--</resources>-->
+                    <!--</configuration>-->
+                <!--</plugin>-->
+                <!-- tag::plugin[] -->
+                <plugin>
+                    <groupId>com.spotify</groupId>
+                    <artifactId>docker-maven-plugin</artifactId>
+                    <version>0.4.13</version>
+                    <configuration>
+                        <imageName>syuukawa/${project.artifactId}</imageName>
+                        <dockerDirectory>src/main/docker</dockerDirectory>
+                        <resources>
+                            <resource>
+                                <targetPath>/</targetPath>
+                                <directory>${project.build.directory}</directory>
+                                <include>${project.build.finalName}.jar</include>
+                            </resource>
+                        </resources>
+                    </configuration>
+                </plugin>
+                <!-- end::plugin[] -->
             </plugins>
         </build>
     <!-- 普通的maven打包方式 -->

@@ -5,6 +5,7 @@ import com.my.blog.website.dao.AttachVoMapper;
 import com.my.blog.website.dto.MetaDto;
 import com.my.blog.website.exception.TipException;
 import com.my.blog.website.modal.Bo.ArchiveBo;
+import com.my.blog.website.modal.Bo.CatalogueBo;
 import com.my.blog.website.modal.Vo.*;
 import com.my.blog.website.service.ISiteService;
 import com.my.blog.website.utils.DateKit;
@@ -176,27 +177,49 @@ public class SiteServiceImpl implements ISiteService {
         return statistics;
     }
 
+//
+//    @Override
+//    public List<ArchiveBo> getArchives() {
+//        LOGGER.debug("Enter getArchives method");
+//        List<ArchiveBo> archives = contentDao.findReturnArchiveBo();
+//        if (null != archives) {
+//            archives.forEach(archive -> {
+//                ContentVoExample example = new ContentVoExample();
+//                ContentVoExample.Criteria criteria = example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
+//                example.setOrderByClause("created desc");
+//                String date = archive.getDate();
+//                Date sd = DateKit.dateFormat(date, "yyyy年MM月");
+//                int start = DateKit.getUnixTimeByDate(sd);
+//                int end = DateKit.getUnixTimeByDate(DateKit.dateAdd(DateKit.INTERVAL_MONTH, sd, 1)) - 1;
+//                criteria.andCreatedGreaterThan(start);
+//                criteria.andCreatedLessThan(end);
+//                List<ContentVo> contentss = contentDao.selectByExample(example);
+//                archive.setArticles(contentss);
+//            });
+//        }
+//        LOGGER.debug("Exit getArchives method");
+//        return archives;
+//    }
+
     @Override
-    public List<ArchiveBo> getArchives() {
+    public List<CatalogueBo> getArchives() {
         LOGGER.debug("Enter getArchives method");
-        List<ArchiveBo> archives = contentDao.findReturnArchiveBo();
-        if (null != archives) {
-            archives.forEach(archive -> {
-                ContentVoExample example = new ContentVoExample();
-                ContentVoExample.Criteria criteria = example.createCriteria().andTypeEqualTo(Types.ARTICLE.getType()).andStatusEqualTo(Types.PUBLISH.getType());
-                example.setOrderByClause("created desc");
-                String date = archive.getDate();
-                Date sd = DateKit.dateFormat(date, "yyyy年MM月");
-                int start = DateKit.getUnixTimeByDate(sd);
-                int end = DateKit.getUnixTimeByDate(DateKit.dateAdd(DateKit.INTERVAL_MONTH, sd, 1)) - 1;
-                criteria.andCreatedGreaterThan(start);
-                criteria.andCreatedLessThan(end);
-                List<ContentVo> contentss = contentDao.selectByExample(example);
-                archive.setArticles(contentss);
-            });
+        List<CatalogueBo> catalogueBoList = new ArrayList<>();
+        //1:::获取分类列表
+        List<String> categories = metaDao.findCategoriesList();
+
+        //2:::根据分类获取contents列表内容
+        for(String category : categories){
+            CatalogueBo catalogueBo = new CatalogueBo();
+            List<ContentVo> contentVoList = contentDao.findListByCategories(category);
+            if(null != contentVoList && contentVoList.size() > 0){
+                catalogueBo.setCategories(category);
+                catalogueBo.setArticles(contentVoList);
+                catalogueBoList.add(catalogueBo);
+            }
         }
         LOGGER.debug("Exit getArchives method");
-        return archives;
+        return catalogueBoList;
     }
 
     @Override

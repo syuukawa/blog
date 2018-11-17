@@ -267,4 +267,13 @@
     FROM t_contents a LEFT JOIN t_relationships b ON a.cid = b.cid
     WHERE b.mid = #{value} AND a.status = 'publish' AND a.type = 'post';
   </select>
+
+  <!--add by jiutian-->
+  <!--<resultMap id="categoriesBoMap" type="com.my.blog.website.modal.Bo.CatalogueBo">-->
+    <!--<id column="categories" property="categories"/>-->
+    <!--&lt;!&ndash;<result column="count" property="count"/>&ndash;&gt;-->
+  <!--</resultMap>-->
+  <select id="findCategoriesList" resultType="String">
+    select distinct name as categories from t_metas where type = 'category' group by categories order by categories desc
+  </select>
 </mapper>

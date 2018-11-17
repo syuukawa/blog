@@ -32,6 +32,14 @@ public interface IAttachService {
      */
     AttachVo selectById(Integer id);
 
+//  add by jiutian 2018-11-06
+    /**
+     * 根据附件名称查询附件
+     * @param fname
+     * @return
+     */
+    AttachVo selectByFname(String  fname);
+
     /**
      * 删除附件
      * @param id

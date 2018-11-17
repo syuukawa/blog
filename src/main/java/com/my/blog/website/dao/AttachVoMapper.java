@@ -22,6 +22,9 @@ public interface AttachVoMapper {
 
     AttachVo selectByPrimaryKey(Integer id);
 
+//  add by jiutian 2018-11-06
+    AttachVo selectByFname(String  fname);
+
     int updateByExampleSelective(@Param("record") AttachVo record, @Param("example") AttachVoExample example);
 
     int updateByExample(@Param("record") AttachVo record, @Param("example") AttachVoExample example);

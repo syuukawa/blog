@@ -98,10 +98,24 @@
     from t_attach
     where id = #{id,jdbcType=INTEGER}
   </select>
+  <!--<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">-->
+    <!--delete from t_attach-->
+    <!--where id = #{id,jdbcType=INTEGER}-->
+  <!--</delete>-->
+
+  <!--add by jiutian 2018-11-06-->
+  <select id="selectByFname" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from t_attach
+    where fname = #{fname,jdbcType=VARCHAR}
+  </select>
+
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_attach
     where id = #{id,jdbcType=INTEGER}
   </delete>
+
   <delete id="deleteByExample" parameterType="com.my.blog.website.modal.Vo.AttachVoExample">
     delete from t_attach
     <if test="_parameter != null">

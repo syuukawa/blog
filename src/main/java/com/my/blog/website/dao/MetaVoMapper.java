@@ -39,4 +39,6 @@ public interface MetaVoMapper {
     MetaDto selectDtoByNameAndType(@Param("name") String name,@Param("type") String type);
 
     Integer countWithSql(Integer mid);
+
+    List<String> findCategoriesList();
 }

@@ -42,6 +42,14 @@ public class AttachServiceImpl implements IAttachService {
     }
 
     @Override
+    public AttachVo selectByFname(String fname) {
+        if(null != fname){
+            return attachDao.selectByFname(fname);
+        }
+        return null;
+    }
+
+    @Override
     public void save(String fname, String fkey, String ftype, Integer author) {
         AttachVo attach = new AttachVo();
         attach.setFname(fname);

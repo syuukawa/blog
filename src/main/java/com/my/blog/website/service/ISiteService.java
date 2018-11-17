@@ -3,6 +3,7 @@ package com.my.blog.website.service;
 import com.my.blog.website.dto.MetaDto;
 import com.my.blog.website.modal.Bo.ArchiveBo;
 import com.my.blog.website.modal.Bo.BackResponseBo;
+import com.my.blog.website.modal.Bo.CatalogueBo;
 import com.my.blog.website.modal.Bo.StatisticsBo;
 import com.my.blog.website.modal.Vo.CommentVo;
 import com.my.blog.website.modal.Vo.ContentVo;
@@ -57,12 +58,19 @@ public interface ISiteService {
      */
     StatisticsBo getStatistics();
 
+//    /**
+//     * 查询文章归档
+//     *
+//     * @return
+//     */
+//    List<ArchiveBo> getArchives();
+
     /**
      * 查询文章归档
      *
      * @return
      */
-    List<ArchiveBo> getArchives();
+    List<CatalogueBo> getArchives();
 
     /**
      * 获取分类/标签列表

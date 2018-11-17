@@ -14,7 +14,9 @@
         </div>
     </div>
     <div id="post-content" class="post-content" itemprop="articleBody">
-        <p class="post-tags" th:utext="${commons.show_tags(article.tags)}"></p>
+        <!--从tag变成分类-->
+        <!--<p class="post-tags" th:utext="${commons.show_tags(article.tags)}"></p>-->
+        <p class="post-tags" th:utext="${commons.show_categories(article.categories)}"></p>
         <th:block th:utext="${commons.article(article.content)}"/>
         <p class="post-info">
             本站文章除注明转载/出处外，均为本站原创或翻译，转载前请务必署名,转载请标明出处<br/>最后编辑时间为:
