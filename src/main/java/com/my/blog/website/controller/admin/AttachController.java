@@ -12,9 +12,11 @@ import com.my.blog.website.modal.Vo.UserVo;
 import com.my.blog.website.service.IAttachService;
 import com.my.blog.website.service.ILogService;
 import com.my.blog.website.utils.Commons;
+import com.my.blog.website.utils.MyConfig;
 import com.my.blog.website.utils.TaleUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.FileCopyUtils;
@@ -48,6 +50,8 @@ public class AttachController extends BaseController {
     @Resource
     private ILogService logService;
 
+    @Autowired
+    private MyConfig myConfig;
     /**
      * 附件页面
      *
@@ -91,7 +95,7 @@ public class AttachController extends BaseController {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                    attachService.save(fname, fkey, ftype, uid);
+                    attachService.save(fname, myConfig.getPictureServer() + fkey, ftype, uid);
                 } else {
                     errorFiles.add(fname);
                 }

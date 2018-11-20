@@ -150,7 +150,7 @@
     </if>
   </delete>
   <insert id="insert" parameterType="com.my.blog.website.modal.Vo.ContentVo" useGeneratedKeys="true" keyProperty="cid">
-    insert into t_contents (cid, name, symbol, crowdPrice, crowdEndTime
+    insert into t_contents (cid, name, symbol, crowdPrice, crowdEndTime,
       title, slug,
       created, modified, author_id, 
       type, status, tags, 
